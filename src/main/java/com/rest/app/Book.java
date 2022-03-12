@@ -1,18 +1,25 @@
 package com.rest.app;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import lombok.*;
+
+import javax.persistence.*;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Table(name = "book_record")
 public class Book {
-    private Long id;
+@Id
+@GeneratedValue(strategy = GenerationType.AUTO)
+    private Long bookId;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @NonNull
+    private String name;
 
-    @Id
-    public Long getId() {
-        return id;
-    }
+    @NonNull
+    private String summary;
+
+    private int rating;
 }
