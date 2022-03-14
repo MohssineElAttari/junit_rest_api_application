@@ -22,4 +22,6 @@ public class Book {
     private String summary;
 
     private int rating;
+
 }
+
