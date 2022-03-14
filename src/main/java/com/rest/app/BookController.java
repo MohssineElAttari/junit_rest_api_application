@@ -2,10 +2,8 @@ package com.rest.app;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -16,7 +14,7 @@ public class BookController {
     private BookRepository bookRepository;
 
      @GetMapping("/books")
-    public List<Book> getAllBookRecord(){
+    public List<Book> getAllBookRecords(){
          return bookRepository.findAll();
      }
 
@@ -24,4 +22,19 @@ public class BookController {
     public Book getBook(@PathVariable(value = "bookId")Long bookId){
          return bookRepository.findById(bookId).get();
      }
+
+     @PostMapping
+    public Book CreateBookRecord(@RequestBody Book bookRecord){
+         return bookRepository.save(bookRecord);
+     }
+
+     @PutMapping
+    public Book updateBookRecord(@RequestBody Book bookRecord){
+         if (bookRecord==null || bookRecord.getBookId()==null){
+
+         }
+         return bookRepository.save(bookRecord);
+    }
+
 }
+
