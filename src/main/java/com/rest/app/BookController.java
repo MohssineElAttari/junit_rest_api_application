@@ -1,11 +1,15 @@
 package com.rest.app;
 
 
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/book")
@@ -24,17 +28,29 @@ public class BookController {
      }
 
      @PostMapping
-    public Book CreateBookRecord(@RequestBody Book bookRecord){
+    public Book CreateBookRecord(@RequestBody @Valid Book bookRecord){
          return bookRepository.save(bookRecord);
      }
 
      @PutMapping
-    public Book updateBookRecord(@RequestBody Book bookRecord){
+    public Book updateBookRecord(@RequestBody Book bookRecord) throws NotFoundException {
          if (bookRecord==null || bookRecord.getBookId()==null){
-
+                throw new NotFoundException("bookRecord or id not be null!");
          }
-         return bookRepository.save(bookRecord);
+         Optional<Book>optionalBook=bookRepository.findById(bookRecord.getBookId());
+         if (!optionalBook.isPresent()){
+             throw new NotFoundException("book white id "+bookRecord.getBookId()+" does not exist");
+         }
+         Book bookRecordExist= optionalBook.get();
+         bookRecordExist.setName(bookRecord.getName());
+         bookRecordExist.setSummary(bookRecord.getSummary());
+         bookRecordExist.setRating(bookRecord.getRating());
+
+         return bookRepository.save(bookRecordExist);
     }
+
+    // TODO : write /delete endpoint using tdd method
+
 
 }
 
